@@ -36,7 +36,7 @@ public class UserActionsDaoImpl {
         } else if (userId > 0){
             sql=String.format("select * from vgp_users where id = %d", userId);
         } else {
-            sql=String.format("select * from vgp_users where first_name = %d", firstName);
+            sql=String.format("select * from vgp_users where first_name = UPPER('%s')", firstName);
         }
 
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
