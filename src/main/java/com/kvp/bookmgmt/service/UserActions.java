@@ -1,6 +1,8 @@
 package com.kvp.bookmgmt.service;
 
 import com.kvp.bookmgmt.service.dao.UserActionsDaoImpl;
+import com.kvp.web.domain.Book;
+import com.kvp.web.domain.BookMaster;
 import com.kvp.web.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,6 +32,18 @@ public class UserActions {
     public String addUserToDatabase(User user) {
 
         userActionsDao.insertUserIntoDatabase(user);
+        return "";
+    }
+
+    public String addBookMasterToDatabase(BookMaster bookMaster) {
+
+        userActionsDao.insertBookMasterIntoDatabase(bookMaster);
+        return "";
+    }
+
+    public String addBookToDatabase(Book book) {
+
+        userActionsDao.insertBookIntoDatabase(book);
         return "";
     }
 }

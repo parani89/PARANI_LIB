@@ -1,5 +1,7 @@
 package com.kvp.bookmgmt.service.dao;
 
+import com.kvp.web.domain.Book;
+import com.kvp.web.domain.BookMaster;
 import com.kvp.web.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static com.kvp.bookmgmt.service.dao.UserActionsDao.BOOK_INSERT;
+import static com.kvp.bookmgmt.service.dao.UserActionsDao.BOOK_MASTER_INSERT;
 import static com.kvp.bookmgmt.service.dao.UserActionsDao.USER_INSERT;
 
 @Service
@@ -24,6 +28,20 @@ public class UserActionsDaoImpl {
         user.getDateOfJoin(), user.getDateofReturn(), user.getBookLimit(), user.getCrtUser(), user.getUpdUser());
 
         System.out.println("Inserted to table "+user.getFirstName());
+    }
+
+    public void insertBookMasterIntoDatabase(BookMaster bookMaster) {
+
+        jdbcTemplate.update(BOOK_MASTER_INSERT, bookMaster.getBookGroupId(),bookMaster.getBookName(),bookMaster.getAuthor(),bookMaster.getYear(),bookMaster.getCrtUser(),bookMaster.getUpdUser());
+
+        System.out.println("Inserted to table "+bookMaster.getBookName());
+    }
+
+    public void insertBookIntoDatabase(Book book) {
+
+        jdbcTemplate.update(BOOK_INSERT, book.getBookId(), book.getBookGroupId(), book.getAvailability(), book.getUserHolding(), book.getCrtUser(), book.getUpdUser());
+
+        System.out.println("Inserted to table "+book.getBookId());
     }
 
     public List<User> listUserFromDatabase(String firstName, int userId) {
