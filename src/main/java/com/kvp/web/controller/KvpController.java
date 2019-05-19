@@ -21,7 +21,7 @@ public class KvpController {
     private UserActions userActions;
 
     @RequestMapping("/addUser")
-    public String addUser(@RequestParam(name="userId", defaultValue = "0", required = true) int userId,
+    public String addUser(@RequestParam(name="userId", required = true) int userId,
                           @RequestParam(name="firstName", required =  true) String firstName,
                           @RequestParam(name="lastName", required =  true) String lastName,
                           @RequestParam(name="category", required =  true) String category,
@@ -44,7 +44,7 @@ public class KvpController {
     }
 
     @RequestMapping("/listUser")
-    public List<User> listUser(@RequestParam(name="userId", required = false) int userId,
+    public List<User> listUser(@RequestParam(name="userId", defaultValue = "0", required = false) int userId,
                            @RequestParam(name="firstName", required = false) String firstName) {
 
         return userActions.listUserToDatabase(firstName, userId);
