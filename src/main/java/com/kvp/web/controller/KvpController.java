@@ -1,6 +1,6 @@
 package com.kvp.web.controller;
 
-import com.kvp.bookmgmt.service.UserActions;
+import com.kvp.service.UserActions;
 import com.kvp.engine.KvpServer;
 import com.kvp.web.domain.Book;
 import com.kvp.web.domain.BookMaster;
@@ -79,7 +79,7 @@ public class KvpController {
                            @RequestParam(name="firstName", required = false) String firstName) {
 
         LOGGER.info("Before Listing User "+userId);
-        LOGGER.debug("Before Listing User "+userId);
+        LOGGER.debug("Before Listing User "+userId); // TODO Learn what is the diff b/w info debug and error
         return userActions.listUserToDatabase(firstName, userId);
         
     }

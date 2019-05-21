@@ -1,5 +1,6 @@
-package com.kvp.bookmgmt.service.dao;
+package com.kvp.dao;
 
+import com.kvp.cache.GlobalCacheManager;
 import com.kvp.web.domain.Book;
 import com.kvp.web.domain.BookMaster;
 import com.kvp.web.domain.User;
@@ -21,6 +22,9 @@ public class UserActionsDaoImpl {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private GlobalCacheManager globalCacheManager;
 
     public void insertUserIntoDatabase(User user) {
 
@@ -44,39 +48,17 @@ public class UserActionsDaoImpl {
         System.out.println("Inserted to table "+book.getBookId());
     }
 
-    public List<User> listUserFromDatabase(String firstName, int userId) {
+    public List<User> listUserFromMemory(String firstName, int userId) {
 
-        List<User> responseUser = new ArrayList<>();
-        String sql;
-
+        List<User> users = new ArrayList<>();
         if(firstName == null && userId == 0 ) {
-            sql="select * from vgp_users";
+            return globalCacheManager.getUserList();
         } else if (userId > 0){
-            sql=String.format("select * from vgp_users where id = %d", userId);
+            users.add(globalCacheManager.getUserIdMap().get(userId));
+            return users;
         } else {
-            sql=String.format("select * from vgp_users where first_name = UPPER('%s')", firstName);
+            users.add(globalCacheManager.getUserNameMap().get(firstName));
+            return users;
         }
-
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
-        for(Map row : rows) {
-            User user1 = new User();
-            user1.setId(1);
-            user1.setFirstName((String) row.get("first_name"));
-            user1.setLastName((String) row.get("last_name"));
-            user1.setCategory((String) row.get("category"));
-            user1.setGender((String) row.get("gender"));
-            user1.setDateOfBirth((Date) row.get("dob"));
-            user1.setDateOfJoin((Date) row.get("doj"));
-            user1.setDateofReturn((Date) row.get("dor"));
-            user1.setBookLimit(1);
-            user1.setCrtTime((Date) row.get("crt_ts"));
-            user1.setUpdTime((Date) row.get("upd_ts"));
-            user1.setCrtUser((String) row.get("crt_usr"));
-            user1.setCrtUser((String) row.get("upd_usr"));
-
-            responseUser.add(user1);
-        }
-
-        return responseUser;
     }
 }

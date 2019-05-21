@@ -1,6 +1,6 @@
-package com.kvp.bookmgmt.service;
+package com.kvp.service;
 
-import com.kvp.bookmgmt.service.dao.UserActionsDaoImpl;
+import com.kvp.dao.UserActionsDaoImpl;
 import com.kvp.web.domain.Book;
 import com.kvp.web.domain.BookMaster;
 import com.kvp.web.domain.User;
@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class UserActions {
@@ -26,7 +23,7 @@ public class UserActions {
 
     public List<User> listUserToDatabase(String firstName, int userId) {
 
-        return userActionsDao.listUserFromDatabase(firstName, userId);
+        return userActionsDao.listUserFromMemory(firstName, userId);
     }
 
     public String addUserToDatabase(User user) {
