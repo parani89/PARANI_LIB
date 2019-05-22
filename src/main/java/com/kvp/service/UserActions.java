@@ -3,6 +3,7 @@ package com.kvp.service;
 import com.kvp.dao.UserActionsDaoImpl;
 import com.kvp.web.domain.Book;
 import com.kvp.web.domain.BookMaster;
+import com.kvp.web.domain.BookRack;
 import com.kvp.web.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,9 +22,14 @@ public class UserActions {
     @Autowired
     private UserActionsDaoImpl userActionsDao;
 
-    public List<User> listUserToDatabase(String firstName, int userId) {
+    public List<User> listUserFromDatabase(String firstName, int userId) {
 
         return userActionsDao.listUserFromMemory(firstName, userId);
+    }
+
+    public List<BookRack> listBookFromDatabase(String bookName, int bookGrpId) {
+
+        return userActionsDao.listBookRackFromMemory(bookName, bookGrpId);
     }
 
     public String addUserToDatabase(User user) {

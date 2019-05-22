@@ -1,9 +1,9 @@
 package com.kvp.web.controller;
 
 import com.kvp.service.UserActions;
-import com.kvp.engine.KvpServer;
 import com.kvp.web.domain.Book;
 import com.kvp.web.domain.BookMaster;
+import com.kvp.web.domain.BookRack;
 import com.kvp.web.domain.User;
 import io.swagger.annotations.Api;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -80,7 +79,17 @@ public class KvpController {
 
         LOGGER.info("Before Listing User "+userId);
         LOGGER.debug("Before Listing User "+userId); // TODO Learn what is the diff b/w info debug and error
-        return userActions.listUserToDatabase(firstName, userId);
+        return userActions.listUserFromDatabase(firstName, userId);
         
+    }
+
+    @RequestMapping("/listBookRack")
+    public List<BookRack> listBookRack(@RequestParam(name="bookGrpId", defaultValue = "0", required = false) int bookGrpId,
+                                       @RequestParam(name="bookName", required = false) String bookName) {
+
+        LOGGER.info("Before Listing User "+bookGrpId);
+        LOGGER.debug("Before Listing User "+bookName); // TODO Learn what is the diff b/w info debug and error
+        return userActions.listBookFromDatabase(bookName, bookGrpId);
+
     }
 }

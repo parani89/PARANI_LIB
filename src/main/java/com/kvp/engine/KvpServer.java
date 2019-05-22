@@ -47,7 +47,7 @@ public class KvpServer {
 
         LOGGER.info("Running Main application");
 
-        MainService mainService = (MainService) springContainer.getBean("KvpMainService");
+        MainService mainService = (MainService) springContainer.getBean(KvpMainService.class);
         mainService.init();
         mainService.run();
     }

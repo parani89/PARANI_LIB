@@ -3,6 +3,7 @@ package com.kvp.dao;
 import com.kvp.cache.GlobalCacheManager;
 import com.kvp.web.domain.Book;
 import com.kvp.web.domain.BookMaster;
+import com.kvp.web.domain.BookRack;
 import com.kvp.web.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -59,6 +60,20 @@ public class UserActionsDaoImpl {
         } else {
             users.add(globalCacheManager.getUserNameMap().get(firstName));
             return users;
+        }
+    }
+
+    public List<BookRack> listBookRackFromMemory(String bookName, int bookGrpId) {
+
+        List<BookRack> bookRacks = new ArrayList<>();
+        if(bookName == null && bookGrpId == 0 ) {
+            return globalCacheManager.getBookRacks();
+
+        } else if (bookGrpId > 0){
+            bookRacks.add(globalCacheManager.getBookIdMap().get(bookGrpId));
+            return bookRacks;
+        } else {
+            return bookRacks;
         }
     }
 }

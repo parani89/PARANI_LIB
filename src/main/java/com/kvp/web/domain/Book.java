@@ -13,6 +13,10 @@ public class Book {
     Date crtTime;
     Date updTime;
 
+    public Book() {
+
+    }
+
     public Book(int bookId, int bookGroupId, String availability, String userHolding, String crtUser, String updUser) {
         this.bookId = bookId;
         this.bookGroupId = bookGroupId;
