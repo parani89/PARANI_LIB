@@ -22,6 +22,9 @@ public class UserActions {
     @Autowired
     private UserActionsDaoImpl userActionsDao;
 
+    @Autowired
+    private KvpValidationService kvpValidationService;
+
     public List<User> listUserFromDatabase(String firstName, int userId) {
 
         return userActionsDao.listUserFromMemory(firstName, userId);
@@ -34,19 +37,27 @@ public class UserActions {
 
     public String addUserToDatabase(User user) {
 
+        if (kvpValidationService.validateUserExistance(user)) {
+            return "User already exists inMemory.. Returning back";
+        }
         userActionsDao.insertUserIntoDatabase(user);
-        return "";
+        return "User added to DataBase and inMemory";
     }
 
     public String addBookMasterToDatabase(BookMaster bookMaster) {
 
-        userActionsDao.insertBookMasterIntoDatabase(bookMaster);
-        return "";
+        String responseString;
+        if(kvpValidationService.validateBookMasterAvailability(bookMaster)) {
+            responseString = userActionsDao.updateBookMasterIntoDatabase(bookMaster);
+        } else {
+            responseString = userActionsDao.insertBookMasterIntoDatabase(bookMaster);
+        }
+        return responseString;
     }
 
     public String addBookToDatabase(Book book) {
 
-        userActionsDao.insertBookIntoDatabase(book);
-        return "";
+        String responseString = userActionsDao.insertBookIntoDatabase(book);
+        return responseString;
     }
 }

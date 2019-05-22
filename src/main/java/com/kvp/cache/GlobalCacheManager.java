@@ -1,6 +1,7 @@
 package com.kvp.cache;
 
 import com.kvp.web.domain.Book;
+import com.kvp.web.domain.BookMaster;
 import com.kvp.web.domain.BookRack;
 import com.kvp.web.domain.User;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,16 @@ public class GlobalCacheManager {
 
     private Map<Integer, BookRack> bookGrpIdMap;
 
+    private Map<Integer, BookMaster> bookMasterMap;
+
+    public Map<Integer, BookMaster> getBookMasterMap() {
+        return bookMasterMap;
+    }
+
+    public void addBookMasterMap(Map<Integer, BookMaster> bookMasterMap) {
+        this.bookMasterMap = bookMasterMap;
+    }
+
     public Map<Integer, BookRack> getBookGrpIdMap() {
         return bookGrpIdMap;
     }
@@ -31,28 +42,8 @@ public class GlobalCacheManager {
         this.bookGrpIdMap = bookGrpIdMap;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
-
-    public void setUserIdMap(Map<Integer, User> userIdMap) {
-        this.userIdMap = userIdMap;
-    }
-
-    public void setUserNameMap(Map<String, User> userNameMap) {
-        this.userNameMap = userNameMap;
-    }
-
-    public void setBookRacks(List<BookRack> bookRacks) {
-        this.bookRacks = bookRacks;
-    }
-
     public Map<Integer, BookRack> getBookIdMap() {
         return bookIdMap;
-    }
-
-    public void setBookIdMap(Map<Integer, BookRack> bookIdMap) {
-        this.bookIdMap = bookIdMap;
     }
 
     public List<BookRack> getBookRacks() {

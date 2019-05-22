@@ -45,9 +45,9 @@ public class KvpController {
         Date dateOfJoin = formatter1.parse(doj);
         User user = new User(userId, firstName, lastName, category, gender, bookLimit, crtUser, updUser, dateOfBirth, dateOfJoin);
 
-        userActions.addUserToDatabase(user);
+        String responseMessage = userActions.addUserToDatabase(user);
 
-        return user.getFirstName()+" Added";
+        return responseMessage;
     }
 
     @RequestMapping("/addBook")
@@ -67,6 +67,7 @@ public class KvpController {
         Book book = new Book(bookId, bookGroupId, availability, userHolding, crtUser, updUser);
         BookMaster bookMaster = new BookMaster(bookGroupId, bookName, author, year, crtUser, updUser);
 
+        // TODO Add the below into single transaction
         userActions.addBookToDatabase(book);
         userActions.addBookMasterToDatabase(bookMaster);
 

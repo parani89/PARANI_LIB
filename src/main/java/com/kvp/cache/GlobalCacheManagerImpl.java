@@ -19,7 +19,7 @@ public class GlobalCacheManagerImpl {
     @Autowired
     private GlobalCacheManager globalCacheManager;
 
-    public void getUserFromDatabase() {
+    public void loadUserFromDatabase() {
 
         List<User> allUserList = new ArrayList<>();
         Map<Integer, User> userIdMap = new HashMap<>();
@@ -57,14 +57,14 @@ public class GlobalCacheManagerImpl {
 
     }
 
-    public void getBookInfoFromDatabase() {
+    public void loadBookInfoFromDatabase() {
 
         String sql="select * from vgp_books a, vgp_book_master b where a.book_grp_id=b.book_grp_id order by book_id";
 
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
         List<BookRack> bookRacks = new ArrayList<>();
         List<Book> books = new ArrayList<>();
-        List<BookMaster> bookMasters = new ArrayList<>();
+        Map<Integer, BookMaster> bookMastersMap = new HashMap<>();
         Map<Integer, Book> bookIdMap = new HashMap<>();
         Map<Integer, BookRack> bookGrpIdMap = new HashMap<>();
 
@@ -75,7 +75,7 @@ public class GlobalCacheManagerImpl {
             BookMaster bookMaster = new BookMaster();
 
             book.setBookId(1);
-            book.setBookGroupId(1);
+            book.setBookGroupId(100);
             book.setUserHolding((String) row.get("user_holding"));
             book.setAvailability((String) row.get("availability"));
             book.setCrtTime((Date) row.get("crt_ts"));
@@ -90,14 +90,14 @@ public class GlobalCacheManagerImpl {
             bookMaster.setAvailableCopies(1);
             bookMaster.setBookName((String) row.get("book_name"));
             bookMaster.setBookGroupId(book.getBookGroupId());
-            bookMaster.setCopies(1);
+            bookMaster.setCopies(2);
             bookMaster.setYear(1);
             bookMaster.setCrtTime((Date) row.get("crt_ts"));
             bookMaster.setUpdTime((Date) row.get("crt_ts"));
             bookMaster.setCrtUser((String) row.get("crt_usr"));
             bookMaster.setUpdUser((String) row.get("upd_usr"));
 
-            bookMasters.add(bookMaster);
+            bookMastersMap.put(bookMaster.getBookGroupId(), bookMaster);
 
             bookRack.setAuthor(bookMaster.getAuthor());
             bookRack.setAvailability(book.getAvailability());
@@ -114,5 +114,6 @@ public class GlobalCacheManagerImpl {
         }
 
         globalCacheManager.addBookRacks(bookRacks);
+        globalCacheManager.addBookMasterMap(bookMastersMap);
     }
 }

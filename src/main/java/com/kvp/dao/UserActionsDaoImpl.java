@@ -14,9 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.kvp.bookmgmt.service.dao.UserActionsDao.BOOK_INSERT;
-import static com.kvp.bookmgmt.service.dao.UserActionsDao.BOOK_MASTER_INSERT;
-import static com.kvp.bookmgmt.service.dao.UserActionsDao.USER_INSERT;
+import static com.kvp.bookmgmt.service.dao.UserActionsDao.*;
 
 @Service
 public class UserActionsDaoImpl {
@@ -35,18 +33,25 @@ public class UserActionsDaoImpl {
         System.out.println("Inserted to table "+user.getFirstName());
     }
 
-    public void insertBookMasterIntoDatabase(BookMaster bookMaster) {
+    public String insertBookMasterIntoDatabase(BookMaster bookMaster) {
 
         jdbcTemplate.update(BOOK_MASTER_INSERT, bookMaster.getBookGroupId(),bookMaster.getBookName(),bookMaster.getAuthor(),bookMaster.getYear(),bookMaster.getCrtUser(),bookMaster.getUpdUser());
 
-        System.out.println("Inserted to table "+bookMaster.getBookName());
+        return "Inserted to table "+bookMaster.getBookName();
     }
 
-    public void insertBookIntoDatabase(Book book) {
+    public String updateBookMasterIntoDatabase(BookMaster bookMaster) {
+
+        jdbcTemplate.update(BOOK_MASTER_UPDATE, bookMaster.getBookGroupId());
+
+        return "Updated to BookMaster table "+bookMaster.getBookName();
+    }
+
+    public String insertBookIntoDatabase(Book book) {
 
         jdbcTemplate.update(BOOK_INSERT, book.getBookId(), book.getBookGroupId(), book.getAvailability(), book.getUserHolding(), book.getCrtUser(), book.getUpdUser());
 
-        System.out.println("Inserted to table "+book.getBookId());
+        return "Inserted to books table "+book.getBookId();
     }
 
     public List<User> listUserFromMemory(String firstName, int userId) {
