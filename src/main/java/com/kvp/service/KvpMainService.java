@@ -32,6 +32,7 @@ public class KvpMainService implements MainService {
     }
 
     private void buildall() {
-        globalCacheManagerImpl.getUserFromDatabase();
+        globalCacheManagerImpl.loadUserFromDatabase();
+        globalCacheManagerImpl.loadBookInfoFromDatabase();
     }
 }

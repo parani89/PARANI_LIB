@@ -1,31 +1,23 @@
 package com.kvp.web.domain;
 
-import java.util.Date;
+public class BookRack {
 
-public class BookMaster {
-
+    int bookId;
     int bookGroupId;
+    String availability;
+    String userHolding;
     String bookName;
     String author;
     int year;
     int copies;
     int availableCopies;
-    String crtUser;
-    String updUser;
-    Date crtTime;
-    Date updTime;
 
-    public BookMaster() {
-
+    public int getBookId() {
+        return bookId;
     }
 
-    public BookMaster(int bookGroupId, String bookName, String author, int year, String crtUser, String updUser) {
-        this.bookGroupId = bookGroupId;
-        this.bookName = bookName;
-        this.author = author;
-        this.year = year;
-        this.crtUser = crtUser;
-        this.updUser = updUser;
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 
     public int getBookGroupId() {
@@ -34,6 +26,22 @@ public class BookMaster {
 
     public void setBookGroupId(int bookGroupId) {
         this.bookGroupId = bookGroupId;
+    }
+
+    public String getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(String availability) {
+        this.availability = availability;
+    }
+
+    public String getUserHolding() {
+        return userHolding;
+    }
+
+    public void setUserHolding(String userHolding) {
+        this.userHolding = userHolding;
     }
 
     public String getBookName() {
@@ -74,37 +82,5 @@ public class BookMaster {
 
     public void setAvailableCopies(int availableCopies) {
         this.availableCopies = availableCopies;
-    }
-
-    public String getCrtUser() {
-        return crtUser;
-    }
-
-    public void setCrtUser(String crtUser) {
-        this.crtUser = crtUser;
-    }
-
-    public String getUpdUser() {
-        return updUser;
-    }
-
-    public void setUpdUser(String updUser) {
-        this.updUser = updUser;
-    }
-
-    public Date getCrtTime() {
-        return crtTime;
-    }
-
-    public void setCrtTime(Date crtTime) {
-        this.crtTime = crtTime;
-    }
-
-    public Date getUpdTime() {
-        return updTime;
-    }
-
-    public void setUpdTime(Date updTime) {
-        this.updTime = updTime;
     }
 }
