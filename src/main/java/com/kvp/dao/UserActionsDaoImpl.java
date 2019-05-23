@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.kvp.bookmgmt.service.dao.UserActionsDao.*;
+import static com.kvp.dao.UserActionsDao.*;
 
 @Service
 public class UserActionsDaoImpl {
@@ -75,7 +75,7 @@ public class UserActionsDaoImpl {
             return globalCacheManager.getBookRacks();
 
         } else if (bookGrpId > 0){
-            bookRacks.add(globalCacheManager.getBookIdMap().get(bookGrpId));
+            bookRacks.add(globalCacheManager.getBookGrpIdMap().get(bookGrpId));
             return bookRacks;
         } else {
             return bookRacks;

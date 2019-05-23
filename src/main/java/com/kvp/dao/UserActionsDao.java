@@ -1,4 +1,4 @@
-package com.kvp.bookmgmt.service.dao;
+package com.kvp.dao;
 
 public class UserActionsDao {
 
