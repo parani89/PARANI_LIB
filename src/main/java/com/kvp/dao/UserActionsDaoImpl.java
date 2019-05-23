@@ -30,7 +30,15 @@ public class UserActionsDaoImpl {
         jdbcTemplate.update(USER_INSERT, user.getId(), user.getFirstName(), user.getLastName(), user.getCategory(), user.getGender(), user.getDateOfBirth(),
         user.getDateOfJoin(), user.getDateofReturn(), user.getBookLimit(), user.getCrtUser(), user.getUpdUser());
 
+        addUserInMemory(user);
+
         System.out.println("Inserted to table "+user.getFirstName());
+    }
+
+    private void addUserInMemory(User user) {
+        globalCacheManager.getUserList().add(user);
+        globalCacheManager.getUserIdMap().put(user.getId(),user);
+        globalCacheManager.getUserNameMap().put(user.getFirstName(),user);
     }
 
     public String insertBookMasterIntoDatabase(BookMaster bookMaster) {
