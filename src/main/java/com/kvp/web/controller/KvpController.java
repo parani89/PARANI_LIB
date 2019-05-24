@@ -93,4 +93,18 @@ public class KvpController {
         return userActions.listBookFromDatabase(bookName, bookGrpId);
 
     }
+
+    @RequestMapping("/deleteUser")
+    public String deleteUser(@RequestParam(name="userId") int userId) {
+
+        String responseString = userActions.deleteUserFromDatabase(userId);
+        return responseString;
+    }
+
+    @RequestMapping("/deleteBook")
+    public String deleteBook(@RequestParam(name="bookId") int bookId) {
+
+        String responseString = userActions.deleteBookFromDatabase(bookId);
+        return responseString;
+    }
 }

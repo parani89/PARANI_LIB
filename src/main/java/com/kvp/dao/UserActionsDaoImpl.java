@@ -35,6 +35,47 @@ public class UserActionsDaoImpl {
         System.out.println("Inserted to table "+user.getFirstName());
     }
 
+    public void deleteUserFromDatabase(int userId) {
+
+        jdbcTemplate.update(USER_DELETE, userId);
+
+        System.out.println("User Marked as Hold"+userId);
+    }
+
+    public void deleteBookFromDatabaseAndInMemory(int bookId) {
+
+        jdbcTemplate.update(BOOK_DELETE, bookId);
+
+        adjustTotalBookCopyInMemoryAndDatabase(bookId, '-');
+
+        System.out.println("Book Marked as Hold"+bookId);
+    }
+
+    private void adjustTotalBookCopyInMemoryAndDatabase(int bookId, char c) {
+
+        int bookGrpId = globalCacheManager.getBookIdMap().get(bookId).getBookGroupId();
+        int noOfCopies=globalCacheManager.getBookGrpIdMap().get(bookGrpId).getCopies();
+
+        if(noOfCopies >=1 ) {
+            jdbcTemplate.update(REMOVE_COPIES, bookGrpId);
+            adjustTotalCopiesInMemory(c, bookId, bookGrpId, noOfCopies);
+        }
+    }
+
+    private void adjustTotalCopiesInMemory(char c, int bookId, int bookGrpId, int noOfCopies) {
+
+        if(c == '+') {
+            globalCacheManager.getBookGrpIdMap().get(bookGrpId).setCopies(noOfCopies+1);
+        } else {
+            globalCacheManager.getBookIdMap().get(bookId).setAlive("N");
+            globalCacheManager.getBookGrpIdMap().get(bookGrpId).setCopies(noOfCopies-1);
+            if(noOfCopies==1) {
+                jdbcTemplate.update(BOOK_MASTER_DELETE, bookGrpId);
+                globalCacheManager.getBookMasterMap().get(bookGrpId).setAlive("N");
+            }
+        }
+    }
+
     private void addUserInMemory(User user) {
         globalCacheManager.getUserList().add(user);
         globalCacheManager.getUserIdMap().put(user.getId(),user);

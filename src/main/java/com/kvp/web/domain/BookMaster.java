@@ -14,6 +14,8 @@ public class BookMaster {
     String updUser;
     Date crtTime;
     Date updTime;
+    String alive;
+
 
     public BookMaster() {
 
@@ -106,5 +108,13 @@ public class BookMaster {
 
     public void setUpdTime(Date updTime) {
         this.updTime = updTime;
+    }
+
+    public String getAlive() {
+        return alive;
+    }
+
+    public void setAlive(String alive) {
+        this.alive = alive;
     }
 }

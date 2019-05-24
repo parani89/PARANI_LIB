@@ -37,11 +37,46 @@ public class UserActions {
 
     public String addUserToDatabase(User user) {
 
-        if (kvpValidationService.validateUserExistance(user)) {
+        if (kvpValidationService.validateUserExistance(user.getId())) {
             return "User already exists inMemory.. Returning back";
         }
         userActionsDao.insertUserIntoDatabase(user);
         return "User added to DataBase and inMemory";
+    }
+
+    public String deleteUserFromDatabase(int userId) {
+
+        if (kvpValidationService.validateUserExistance(userId)) {
+            if(! kvpValidationService.IsUserHoldingBooks(userId, "user")) {
+                userActionsDao.deleteUserFromDatabase(userId);
+            } else {
+                return "User NOT deleted from DataBase and inMemory";
+            }
+        } else {
+            return "User NOT exists in DataBase and inMemory";
+        }
+
+        return "User deleted from DataBase and inMemory";
+    }
+
+    public String deleteBookFromDatabase(int bookId) {
+
+        if(kvpValidationService.isBookAlive(bookId)) {
+
+            if (kvpValidationService.validateBookExistance(bookId)) {
+                if (kvpValidationService.IsUserHoldingBooks(bookId, "book")) {
+                    userActionsDao.deleteBookFromDatabaseAndInMemory(bookId);
+                } else {
+                    return "Book NOT deleted from DataBase and inMemory";
+                }
+            } else {
+                return "Book NOT exists in DataBase and inMemory";
+            }
+
+            return "Book deleted from DataBase and inMemory";
+        } else {
+            return "Book already inactive/deleted";
+        }
     }
 
     public String addBookMasterToDatabase(BookMaster bookMaster) {

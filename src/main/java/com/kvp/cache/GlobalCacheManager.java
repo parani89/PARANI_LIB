@@ -20,7 +20,7 @@ public class GlobalCacheManager {
 
     private List<BookRack> bookRacks;
 
-    private Map<Integer, BookRack> bookIdMap;
+    private Map<Integer, Book> bookIdMap;
 
     private Map<Integer, BookRack> bookGrpIdMap;
 
@@ -42,7 +42,11 @@ public class GlobalCacheManager {
         this.bookGrpIdMap = bookGrpIdMap;
     }
 
-    public Map<Integer, BookRack> getBookIdMap() {
+    public void addBookIdMap(Map<Integer, Book> bookIdMap) {
+        this.bookIdMap = bookIdMap;
+    }
+
+    public Map<Integer, Book> getBookIdMap() {
         return bookIdMap;
     }
 

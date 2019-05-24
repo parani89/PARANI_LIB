@@ -12,6 +12,7 @@ public class Book {
     String updUser;
     Date crtTime;
     Date updTime;
+    String alive;
 
     public Book() {
 
@@ -88,5 +89,13 @@ public class Book {
 
     public void setUpdTime(Date updTime) {
         this.updTime = updTime;
+    }
+
+    public String getAlive() {
+        return alive;
+    }
+
+    public void setAlive(String alive) {
+        this.alive = alive;
     }
 }

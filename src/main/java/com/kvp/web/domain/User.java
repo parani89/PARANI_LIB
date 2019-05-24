@@ -34,6 +34,24 @@ public class User {
     Date crtTime;
     String updUser;
     Date updTime;
+    int booksAvailed;
+    String holdFlag;
+
+    public String getHoldFlag() {
+        return holdFlag;
+    }
+
+    public void setHoldFlag(String holdFlag) {
+        this.holdFlag = holdFlag;
+    }
+
+    public int getBooksAvailed() {
+        return booksAvailed;
+    }
+
+    public void setBooksAvailed(int booksAvailed) {
+        this.booksAvailed = booksAvailed;
+    }
 
     public int getId() {
         return id;
