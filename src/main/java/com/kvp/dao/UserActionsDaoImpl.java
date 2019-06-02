@@ -91,20 +91,23 @@ public class UserActionsDaoImpl {
 
         int bookGrpId = globalCacheManager.getBookIdMap().get(bookId).getBookGroupId();
         int noOfCopies=globalCacheManager.getBookGrpIdMap().get(bookGrpId).getCopies();
+        int availableCopies=globalCacheManager.getBookGrpIdMap().get(bookGrpId).getAvailableCopies();
 
         if(noOfCopies >=1 ) {
             jdbcTemplate.update(REMOVE_COPIES, bookGrpId);
-            adjustTotalCopiesInMemory(c, bookId, bookGrpId, noOfCopies);
+            adjustTotalCopiesInMemory(c, bookId, bookGrpId, noOfCopies, availableCopies);
         }
     }
 
-    private void adjustTotalCopiesInMemory(char c, int bookId, int bookGrpId, int noOfCopies) {
+    private void adjustTotalCopiesInMemory(char c, int bookId, int bookGrpId, int noOfCopies, int availableCopies) {
 
         if(c == '+') {
             globalCacheManager.getBookGrpIdMap().get(bookGrpId).setCopies(noOfCopies+1);
+            globalCacheManager.getBookGrpIdMap().get(bookGrpId).setAvailableCopies(availableCopies+1);
         } else {
             globalCacheManager.getBookIdMap().get(bookId).setAlive("N");
             globalCacheManager.getBookGrpIdMap().get(bookGrpId).setCopies(noOfCopies-1);
+            globalCacheManager.getBookGrpIdMap().get(bookGrpId).setAvailableCopies(availableCopies-1);
             if(noOfCopies==1) {
                 jdbcTemplate.update(BOOK_MASTER_DELETE, bookGrpId);
                 globalCacheManager.getBookMasterMap().get(bookGrpId).setAlive("N");
