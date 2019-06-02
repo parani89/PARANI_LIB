@@ -1,6 +1,7 @@
 package com.kvp.dao;
 
 import com.kvp.cache.GlobalCacheManager;
+import com.kvp.domain.VgpTxn;
 import com.kvp.web.domain.Book;
 import com.kvp.web.domain.BookMaster;
 import com.kvp.web.domain.BookRack;
@@ -28,18 +29,18 @@ public class UserActionsDaoImpl {
     public void insertUserIntoDatabase(User user) {
 
         jdbcTemplate.update(USER_INSERT, user.getId(), user.getFirstName(), user.getLastName(), user.getCategory(), user.getGender(), user.getDateOfBirth(),
-        user.getDateOfJoin(), user.getDateofReturn(), user.getBookLimit(), user.getCrtUser(), user.getUpdUser());
+        user.getDateOfJoin(), user.getDateofReturn(), user.getBookLimit(), user.getCrtUser(), user.getUpdUser(), user.getHoldFlag(), user.getBooksAvailed());
 
         addUserInMemory(user);
 
         System.out.println("Inserted to table "+user.getFirstName());
     }
 
-    public void deleteUserFromDatabase(int userId) {
+    public void deleteUserFromDatabase(User user) {
 
-        jdbcTemplate.update(USER_DELETE, userId);
+        jdbcTemplate.update(USER_DELETE, user.getId());
 
-        System.out.println("User Marked as Hold"+userId);
+        System.out.println("User Marked as Hold"+user.getId());
     }
 
     public void deleteBookFromDatabaseAndInMemory(int bookId) {
@@ -49,6 +50,41 @@ public class UserActionsDaoImpl {
         adjustTotalBookCopyInMemoryAndDatabase(bookId, '-');
 
         System.out.println("Book Marked as Hold"+bookId);
+    }
+
+    public void createTxnLog(User user, VgpTxn vgpTxn, String msgTx) {
+
+        vgpTxn.setMsgTx(msgTx);
+        vgpTxn.setUserId(user.getId());
+        vgpTxn.setUserFirstName(user.getFirstName());
+        vgpTxn.setUserLastName(user.getLastName());
+        vgpTxn.setCrtTs(user.getCrtTime());
+        vgpTxn.setCrtUser(user.getCrtUser());
+
+        System.out.println("Txn Journal created");
+
+    }
+
+    public void createTxnLog(Book book, BookMaster bookMaster, VgpTxn vgpTxn, String msgTx) {
+
+        vgpTxn.setMsgTx(msgTx);
+
+        vgpTxn.setBookId(book.getBookId());
+        vgpTxn.setBookGrpId(book.getBookGroupId());
+        vgpTxn.setBookName(bookMaster.getBookName());
+        vgpTxn.setCrtTs(book.getCrtTime());
+        vgpTxn.setCrtUser(book.getCrtUser());
+
+        System.out.println("Txn Journal created");
+
+    }
+
+    public void insertTxnLog(VgpTxn vgpTxn) {
+
+        jdbcTemplate.update(TXN_INSERT, vgpTxn.getBookId(), vgpTxn.getBookGrpId(), vgpTxn.getBookName(), vgpTxn.getMsgTx(), vgpTxn.getUserId(), vgpTxn.getUserFirstName(), vgpTxn.getUserLastName(), vgpTxn.getCrtUser(), vgpTxn.getCrtTs());
+
+        System.out.println("Txn Journal updated");
+
     }
 
     private void adjustTotalBookCopyInMemoryAndDatabase(int bookId, char c) {
@@ -129,5 +165,32 @@ public class UserActionsDaoImpl {
         } else {
             return bookRacks;
         }
+    }
+
+    public String insertBookInMemory(Book book, BookMaster bookMaster) {
+
+        if(globalCacheManager.getBookGrpIdMap().get(book.getBookGroupId()) != null) {
+            bookMaster.setAvailableCopies(globalCacheManager.getBookGrpIdMap().get(bookMaster.getBookGroupId()).getAvailableCopies() + 1);
+            bookMaster.setCopies(globalCacheManager.getBookGrpIdMap().get(bookMaster.getBookGroupId()).getAvailableCopies() + 1);
+        }
+        BookRack bookRack = new BookRack();
+        populateBookRack(book, bookMaster, bookRack);
+        globalCacheManager.getBookIdMap().put(book.getBookId(), book);
+        globalCacheManager.getBookMasterMap().put(bookMaster.getBookGroupId(),bookMaster);
+        globalCacheManager.getBookGrpIdMap().put(bookRack.getBookGroupId(), bookRack);
+        globalCacheManager.getBookRacks().add(bookRack);
+        return "Book added to database and memory";
+    }
+
+    public void populateBookRack(Book book, BookMaster bookMaster, BookRack bookRack) {
+        bookRack.setAuthor(bookMaster.getAuthor());
+        bookRack.setAvailability(book.getAvailability());
+        bookRack.setAvailableCopies(bookMaster.getAvailableCopies());
+        bookRack.setBookGroupId(book.getBookGroupId());
+        bookRack.setBookId(book.getBookId());
+        bookRack.setBookName(bookMaster.getBookName());
+        bookRack.setUserHolding(book.getUserHolding());
+        bookRack.setYear(bookMaster.getYear());
+        bookRack.setCopies(bookMaster.getCopies());
     }
 }

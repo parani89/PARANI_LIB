@@ -1,6 +1,8 @@
 package com.kvp.service;
 
+import com.kvp.cache.GlobalCacheManager;
 import com.kvp.dao.UserActionsDaoImpl;
+import com.kvp.domain.VgpTxn;
 import com.kvp.web.domain.Book;
 import com.kvp.web.domain.BookMaster;
 import com.kvp.web.domain.BookRack;
@@ -25,6 +27,9 @@ public class UserActions {
     @Autowired
     private KvpValidationService kvpValidationService;
 
+    @Autowired
+    private GlobalCacheManager globalCacheManager;
+
     public List<User> listUserFromDatabase(String firstName, int userId) {
 
         return userActionsDao.listUserFromMemory(firstName, userId);
@@ -37,18 +42,24 @@ public class UserActions {
 
     public String addUserToDatabase(User user) {
 
-        if (kvpValidationService.validateUserExistance(user.getId())) {
+        if (kvpValidationService.validateUserExistance(user)) {
             return "User already exists inMemory.. Returning back";
         }
         userActionsDao.insertUserIntoDatabase(user);
+        VgpTxn vgpTxn = new VgpTxn();
+        userActionsDao.createTxnLog(user, vgpTxn, "Add user");
+        userActionsDao.insertTxnLog(vgpTxn);
         return "User added to DataBase and inMemory";
     }
 
-    public String deleteUserFromDatabase(int userId) {
+    public String deleteUserFromDatabase(User user) {
 
-        if (kvpValidationService.validateUserExistance(userId)) {
-            if(! kvpValidationService.IsUserHoldingBooks(userId, "user")) {
-                userActionsDao.deleteUserFromDatabase(userId);
+        if (kvpValidationService.validateUserExistance(user)) {
+            if(! kvpValidationService.IsUserHoldingBooks(user.getId(), "user")) {
+                userActionsDao.deleteUserFromDatabase(user);
+                VgpTxn vgpTxn = new VgpTxn();
+                userActionsDao.createTxnLog(user, vgpTxn, "Delete user");
+                userActionsDao.insertTxnLog(vgpTxn);
             } else {
                 return "User NOT deleted from DataBase and inMemory";
             }
@@ -59,13 +70,17 @@ public class UserActions {
         return "User deleted from DataBase and inMemory";
     }
 
-    public String deleteBookFromDatabase(int bookId) {
+    public String deleteBookFromDatabase(Book book, BookMaster bookMaster) {
 
-        if(kvpValidationService.isBookAlive(bookId)) {
+        if(kvpValidationService.isBookAlive(book.getBookId())) {
 
-            if (kvpValidationService.validateBookExistance(bookId)) {
-                if (kvpValidationService.IsUserHoldingBooks(bookId, "book")) {
-                    userActionsDao.deleteBookFromDatabaseAndInMemory(bookId);
+            if (kvpValidationService.validateBookExistance(book.getBookId())) {
+                if (kvpValidationService.IsUserHoldingBooks(book.getBookId(), "book")) {
+                    userActionsDao.deleteBookFromDatabaseAndInMemory(book.getBookId());
+                    VgpTxn vgpTxn = new VgpTxn();
+                    bookMaster.setBookName(globalCacheManager.getBookMasterMap().get(globalCacheManager.getBookIdMap().get(book.getBookId()).getBookGroupId()).getBookName());
+                    userActionsDao.createTxnLog(book, bookMaster, vgpTxn, "Delete book");
+                    userActionsDao.insertTxnLog(vgpTxn);
                 } else {
                     return "Book NOT deleted from DataBase and inMemory";
                 }
@@ -79,7 +94,7 @@ public class UserActions {
         }
     }
 
-    public String addBookMasterToDatabase(BookMaster bookMaster) {
+    public String addBookMasterToDatabase(Book book, BookMaster bookMaster) {
 
         String responseString;
         if(kvpValidationService.validateBookMasterAvailability(bookMaster)) {
@@ -87,12 +102,23 @@ public class UserActions {
         } else {
             responseString = userActionsDao.insertBookMasterIntoDatabase(bookMaster);
         }
+
+        VgpTxn vgpTxn = new VgpTxn();
+        userActionsDao.createTxnLog(book, bookMaster, vgpTxn, "Add book");
+        userActionsDao.insertTxnLog(vgpTxn);
+
         return responseString;
     }
 
     public String addBookToDatabase(Book book) {
 
         String responseString = userActionsDao.insertBookIntoDatabase(book);
+        return responseString;
+    }
+
+    public String addBookInMemory(Book book, BookMaster bookMaster) {
+
+        String responseString = userActionsDao.insertBookInMemory(book, bookMaster);
         return responseString;
     }
 }

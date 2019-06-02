@@ -37,17 +37,29 @@ public class KvpController {
                           @RequestParam(name="doj", required =  true) String doj,
                           @RequestParam(name="dor", required =  false) String dor,
                           @RequestParam(name="crtUser", required =  true) String crtUser,
-                          @RequestParam(name="updUser", required =  true) String updUser) throws ParseException {
+                          @RequestParam(name="updUser", required =  true) String updUser,
+                          @RequestParam(name="holdFlag", defaultValue = "N") String holdFlag,
+                          @RequestParam(name="bookAvailed", defaultValue = "0") int bookAvailed) throws ParseException {
 
         LOGGER.info("Before Adding User "+firstName);
         SimpleDateFormat formatter1=new SimpleDateFormat("dd-MM-yyyy");
         Date dateOfBirth = formatter1.parse(dob);
         Date dateOfJoin = formatter1.parse(doj);
-        User user = new User(userId, firstName, lastName, category, gender, bookLimit, crtUser, updUser, dateOfBirth, dateOfJoin);
+        User user = new User(userId, firstName, lastName, category, gender, bookLimit, crtUser, updUser, dateOfBirth, dateOfJoin, holdFlag, bookAvailed);
 
         String responseMessage = userActions.addUserToDatabase(user);
 
         return responseMessage;
+    }
+
+
+    @RequestMapping("/deleteUser")
+    public String deleteUser(@RequestParam(name="userId") int userId) {
+
+        User user = new User();
+        user.setId(userId);
+        String responseString = userActions.deleteUserFromDatabase(user);
+        return responseString;
     }
 
     @RequestMapping("/addBook")
@@ -57,21 +69,22 @@ public class KvpController {
                           @RequestParam(name = "year", required = true) int year,
                           @RequestParam(name = "bookGroupId", required = true) int bookGroupId,
                           @RequestParam(name = "availability", required = true, defaultValue = "Y") String availability,
-                          @RequestParam(name = "userHolding", required = false, defaultValue = "Y") String userHolding,
+                          @RequestParam(name = "userHolding", required = false, defaultValue = "N") String userHolding,
                           @RequestParam(name="crtUser", required =  true) String crtUser,
                           @RequestParam(name="crtUser", required =  true) String updUser
                           ) {
 
         LOGGER.info("Before Adding Book "+bookId);
 
-        Book book = new Book(bookId, bookGroupId, availability, userHolding, crtUser, updUser);
-        BookMaster bookMaster = new BookMaster(bookGroupId, bookName, author, year, crtUser, updUser);
+        Book book = new Book(bookId, bookGroupId, availability, userHolding, crtUser, updUser, "Y");
+        BookMaster bookMaster = new BookMaster(bookGroupId, bookName, author, year, crtUser, updUser, "Y");
 
         // TODO Add the below into single transaction
         userActions.addBookToDatabase(book);
-        userActions.addBookMasterToDatabase(bookMaster);
+        userActions.addBookMasterToDatabase(book, bookMaster);
+        String responseString = userActions.addBookInMemory(book, bookMaster);
 
-        return bookMaster.getBookName()+" Added to database";
+        return responseString;
     }
 
     @RequestMapping("/listUser")
@@ -94,17 +107,13 @@ public class KvpController {
 
     }
 
-    @RequestMapping("/deleteUser")
-    public String deleteUser(@RequestParam(name="userId") int userId) {
-
-        String responseString = userActions.deleteUserFromDatabase(userId);
-        return responseString;
-    }
-
     @RequestMapping("/deleteBook")
     public String deleteBook(@RequestParam(name="bookId") int bookId) {
 
-        String responseString = userActions.deleteBookFromDatabase(bookId);
+        Book book = new Book();
+        BookMaster bookMaster = new BookMaster();
+        book.setBookId(bookId);
+        String responseString = userActions.deleteBookFromDatabase(book, bookMaster);
         return responseString;
     }
 }

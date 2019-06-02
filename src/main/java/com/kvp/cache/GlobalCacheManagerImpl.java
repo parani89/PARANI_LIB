@@ -108,6 +108,7 @@ public class GlobalCacheManagerImpl {
 
                 bookMastersMap.put(bookMaster.getBookGroupId(),bookMaster);
 
+
                 bookRack.setAuthor(bookMaster.getAuthor());
                 bookRack.setAvailability(book.getAvailability());
                 bookRack.setAvailableCopies(bookMaster.getAvailableCopies());

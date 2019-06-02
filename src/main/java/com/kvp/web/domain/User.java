@@ -4,23 +4,6 @@ import java.util.Date;
 
 public class User {
 
-    public User() {
-
-    }
-
-    public User(int id, String firstName, String lastName, String category, String gender, int bookLimit, String crtUser, String updUser, Date dateOfBirth, Date dateOfJoin) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.category = category;
-        this.gender = gender;
-        this.bookLimit = bookLimit;
-        this.crtUser = crtUser;
-        this.updUser = updUser;
-        this.dateOfBirth = dateOfBirth;
-        this.dateOfJoin = dateOfJoin;
-    }
-
     int id;
     String firstName;
     String lastName;
@@ -36,6 +19,25 @@ public class User {
     Date updTime;
     int booksAvailed;
     String holdFlag;
+
+    public User() {
+
+    }
+
+    public User(int id, String firstName, String lastName, String category, String gender, int bookLimit, String crtUser, String updUser, Date dateOfBirth, Date dateOfJoin, String holdFlag, int booksAvailed) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.category = category;
+        this.gender = gender;
+        this.bookLimit = bookLimit;
+        this.crtUser = crtUser;
+        this.updUser = updUser;
+        this.dateOfBirth = dateOfBirth;
+        this.dateOfJoin = dateOfJoin;
+        this.holdFlag = holdFlag;
+        this.booksAvailed = booksAvailed;
+    }
 
     public String getHoldFlag() {
         return holdFlag;

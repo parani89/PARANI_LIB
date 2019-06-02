@@ -12,12 +12,12 @@ public class KvpValidationService {
     @Autowired
     private GlobalCacheManager globalCacheManager;
 
-    public boolean validateUserExistance(int userId) {
+    public boolean validateUserExistance(User user) {
 
         boolean retValue = false;
 
         if(globalCacheManager.getUserIdMap() !=null) {
-            if (globalCacheManager.getUserIdMap().containsKey(userId)) {
+            if (globalCacheManager.getUserIdMap().containsKey(user.getId())) {
                 retValue=true;
             }
         } else {

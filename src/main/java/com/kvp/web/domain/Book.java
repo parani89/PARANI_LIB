@@ -18,13 +18,14 @@ public class Book {
 
     }
 
-    public Book(int bookId, int bookGroupId, String availability, String userHolding, String crtUser, String updUser) {
+    public Book(int bookId, int bookGroupId, String availability, String userHolding, String crtUser, String updUser, String alive) {
         this.bookId = bookId;
         this.bookGroupId = bookGroupId;
         this.availability = availability;
         this.userHolding = userHolding;
         this.crtUser = crtUser;
         this.updUser = updUser;
+        this.setAlive(alive);
     }
 
     public int getBookId() {

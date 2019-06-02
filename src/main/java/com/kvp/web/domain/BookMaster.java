@@ -21,13 +21,14 @@ public class BookMaster {
 
     }
 
-    public BookMaster(int bookGroupId, String bookName, String author, int year, String crtUser, String updUser) {
+    public BookMaster(int bookGroupId, String bookName, String author, int year, String crtUser, String updUser, String alive) {
         this.bookGroupId = bookGroupId;
         this.bookName = bookName;
         this.author = author;
         this.year = year;
         this.crtUser = crtUser;
         this.updUser = updUser;
+        this.alive = alive;
     }
 
     public int getBookGroupId() {
