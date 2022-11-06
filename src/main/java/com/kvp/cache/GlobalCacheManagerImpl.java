@@ -41,12 +41,10 @@ public class GlobalCacheManagerImpl {
                 user1.setGender(resultSet.getString("gender"));
                 user1.setDateOfBirth(resultSet.getDate("dob"));
                 user1.setDateOfJoin(resultSet.getDate("doj"));
-                user1.setBooksAvailed(resultSet.getInt("book_availed"));
+                user1.setBooksAvailed(resultSet.getInt("book_avail"));
                 user1.setHoldFlag(resultSet.getString("hold_flag"));
                 user1.setDateofReturn(resultSet.getDate("dor"));
                 user1.setBookLimit(resultSet.getInt("book_limit"));
-                user1.setCrtTime(resultSet.getDate("crt_ts"));
-                user1.setUpdTime(resultSet.getDate("upd_ts"));
                 user1.setCrtUser(resultSet.getString("crt_usr"));
                 user1.setCrtUser(resultSet.getString("upd_usr"));
 

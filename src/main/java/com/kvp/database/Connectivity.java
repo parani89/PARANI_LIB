@@ -10,11 +10,11 @@ import java.sql.Connection;
 
 public class Connectivity {
     public static void main(String args[]) throws SQLException {
-        String url = "jdbc:oracle:thin:@localhost:1521:ORCL";
+        String url = "jdbc:oracle:thin:@localhost:1521/orclpdb";
         Properties props = new Properties();
 
         props.setProperty("user", "system");
-        props.setProperty("password", "erode");
+        props.setProperty("password", "Erode123");
 
         try {
             Class.forName ("oracle.jdbc.driver.OracleDriver");

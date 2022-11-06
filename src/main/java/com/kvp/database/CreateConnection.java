@@ -21,8 +21,8 @@ public class CreateConnection {
     public DataSource createDataSource() throws SQLException {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUsername("system");
-        dataSource.setPassword("erode");
-        dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:ORCL");
+        dataSource.setPassword("Erode123");
+        dataSource.setUrl("jdbc:oracle:thin:@localhost:1521/orclpdb");
         return dataSource;
     }
 

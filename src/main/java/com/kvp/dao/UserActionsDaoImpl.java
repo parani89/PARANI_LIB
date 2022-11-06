@@ -33,7 +33,7 @@ public class UserActionsDaoImpl {
 
         addUserInMemory(user);
 
-        System.out.println("Inserted to table "+user.getFirstName());
+       // System.out.println("Inserted to table "+user.getFirstName());
     }
 
     public void deleteUserFromDatabase(User user) {
@@ -81,7 +81,7 @@ public class UserActionsDaoImpl {
 
     public void insertTxnLog(VgpTxn vgpTxn) {
 
-        jdbcTemplate.update(TXN_INSERT, vgpTxn.getBookId(), vgpTxn.getBookGrpId(), vgpTxn.getBookName(), vgpTxn.getMsgTx(), vgpTxn.getUserId(), vgpTxn.getUserFirstName(), vgpTxn.getUserLastName(), vgpTxn.getCrtUser(), vgpTxn.getCrtTs());
+        jdbcTemplate.update(TXN_INSERT, vgpTxn.getBookId(), vgpTxn.getBookGrpId(), vgpTxn.getBookName(), vgpTxn.getMsgTx(), vgpTxn.getUserFirstName(), vgpTxn.getUserLastName(), vgpTxn.getCrtUser(), vgpTxn.getCrtTs());
 
         System.out.println("Txn Journal updated");
 
