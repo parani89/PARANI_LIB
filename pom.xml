@@ -14,6 +14,14 @@
         <version>2.1.1.RELEASE</version>
     </parent>
 
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Internal repo</name>
+            <url>file:///home/thara/testesb/in</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
 
         <dependency>
